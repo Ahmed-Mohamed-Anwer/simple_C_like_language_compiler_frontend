@@ -1,10 +1,10 @@
-# 💻 Simple C-Like Language Compiler Frontend (Scanner & Parser)
+# Simple C-Like Language Compiler Frontend (Scanner & Parser)
 
 This repository contains the **lexical analyzer (Scanner)** and **syntactic analyzer (Parser)** for a small, C-like programming language. This project is a foundational exercise in compiler construction, demonstrating the conversion of raw source code into a stream of tokens and then validating that stream against a formal grammar using a **Recursive Descent Parser**.
 
 ---
 
-## 🚀 Features
+## Features
 
 * **Lexical Analysis (Scanner):** Converts C-like source code into meaningful tokens (Keywords, Identifiers, Operators, Numbers, etc.).
 * **Syntactic Analysis (Parser):** Implements a **Recursive Descent Parser** to check the syntax of the token stream against the provided Context-Free Grammar.
@@ -13,18 +13,7 @@ This repository contains the **lexical analyzer (Scanner)** and **syntactic anal
 
 ---
 
-## ⚙️ Project Structure
-
-The core functionality is contained within a single Python file for simplicity:
-
-| File | Description |
-| :--- | :--- |
-| `full_scanner_and_parser.py` | Contains the integrated Scanner and Recursive Descent Parser logic. |
-| `main_code.c` | A sample input file used for demonstrating the compiler's functionality. |
-
----
-
-## ▶️ Running the Code
+##  Running the Code
 
 The main Python script (`full_scanner_and_parser.py`) includes the core logic for both the scanner and parser. You will need to modify the main execution block of this file to handle command-line arguments (`sys.argv`) for reading external files and determining the output mode.
 
@@ -45,7 +34,7 @@ This command reads the input file, tokenizes it, and attempts to parse the resul
 python full_scanner_and_parser.py test.c
 
 ---
-## 📖 Grammar Rules
+## Grammar Rules
 
 The parser uses the following **Context-Free Grammar (CFG)** rules, which define the legal structure of programs in this language. Non-terminals are enclosed in angle brackets (`<>`).
 
