@@ -1,91 +1,82 @@
-# Simple C-Like Language Compiler Frontend (Scanner & Parser)
+# Simple C Language (Scanner & Recursive Descent Parser)
 
-This repository contains the **lexical analyzer (Scanner)** and **syntactic analyzer (Parser)** for a small, C-like programming language. This project is a foundational exercise in compiler construction, demonstrating the conversion of raw source code into a stream of tokens and then validating that stream against a formal grammar using a **Recursive Descent Parser**.
+# Features
+- Lexical Analysis (Scanner): Converts C source code into  tokens (Keywords, Identifiers, Operators, Numbers, etc.).
 
----
+- Syntactic Analysis (Parser): Implements a Recursive Descent Parser to check the syntax of the token stream against the provided Context-Free Grammar.
+- Error Detection: Detect Errors (Syntax Errors)  and provide Report for expected Token
 
-## Features
+# How It work
 
-* **Lexical Analysis (Scanner):** Converts C-like source code into meaningful tokens (Keywords, Identifiers, Operators, Numbers, etc.).
-* **Syntactic Analysis (Parser):** Implements a **Recursive Descent Parser** to check the syntax of the token stream against the provided Context-Free Grammar.
-* **Error Detection:** Provides clear error reporting for both unexpected characters (**Lexical Errors**) and violations of the grammar rules (**Syntax Errors**).
-* **Comment Handling:** Properly skips and tokenizes both single-line (`//`) and multi-line (`/* ... */`) comments during both scanning and parsing.
+1-Scan and Parse 
+```
+Python full_scanner_and_parser.py main_code.c
 
----
+```
 
-##  Running the Code
+It Scan and generate Tokens  and parse this tokens and give Result Directly  COMPILATION SUCCESSFUL!  or Error 
 
-The main Python script (`full_scanner_and_parser.py`) includes the core logic for both the scanner and parser. You will need to modify the main execution block of this file to handle command-line arguments (`sys.argv`) for reading external files and determining the output mode.
+2-Scan and Parse AND Save Tokens
 
-### Recommended Setup (Using `full_scanner_and_parser.py`)
+```
+Python full_scanner_and_parser.py main_code.c output.txt
+```
 
-1.  **Save the Code:** Ensure the combined code is saved as `full_scanner_and_parser.py`.
-2.  **Input File:** Create an input file (e.g., `test.c`) containing the C-like source code you wish to analyze.
+The Program work normally and Save Tokens in file.txt
+___
+# Grammar Rules
+Program → FunctionList
 
-### Execution Commands
 
-These commands demonstrate the required two modes of operation:
+FunctionList → Function FunctionList | ε
 
-#### Mode 1: Scan and Parse (Full Frontend Analysis)
 
-This command reads the input file, tokenizes it, and attempts to parse the resulting token stream against the grammar.
+Function → Type IDENTIFIER ( ) { StatementList }
 
-```bash
-python full_scanner_and_parser.py test.c
 
----
-## Grammar Rules
+Type → int | void | float | double | char
 
-The parser uses the following **Context-Free Grammar (CFG)** rules, which define the legal structure of programs in this language. Non-terminals are enclosed in angle brackets (`<>`).
 
-```bnf
-<Program> ::= <FunctionList>
+StatementList → Statement StatementList | ε
 
-<FunctionList> ::= <Function> <FunctionList> | ε
 
-<Function> ::= <Type> IDENTIFIER '(' ')' '{' <StatementList> '}'
+Statement → Declaration | Assignment | IfStatement | ReturnStatement
 
-<Type> ::= KEYWORD('int') | KEYWORD('void') | KEYWORD('float') | KEYWORD('double') | KEYWORD('char')
 
-<StatementList> ::= <Statement> <StatementList> | ε
+Declaration → Type IDENTIFIER MoreVars ;
 
-<Statement> ::= <Declaration>
-            | <Assignment>
-            | <IfStatement>
-            | <ReturnStatement>
 
-<Declaration> ::= <Type> IDENTIFIER <MoreVars> SPECIAL_CHAR(';')
+MoreVars → , IDENTIFIER MoreVars | ε
 
-<MoreVars> ::= SPECIAL_CHAR(',') IDENTIFIER <MoreVars> | ε
 
-<Assignment> ::= IDENTIFIER OPERATOR('=') <Expression> SPECIAL_CHAR(';')
+Assignment → IDENTIFIER = Expression ;
 
-<IfStatement> ::= KEYWORD('if') SPECIAL_CHAR('(') <Condition> SPECIAL_CHAR(')') <Block> <ElsePart>
 
-<Block> ::= SPECIAL_CHAR('{') <StatementList> SPECIAL_CHAR('}')
+IfStatement → if ( Condition ) { StatementList } ElsePart
 
-<ElsePart> ::= KEYWORD('else') <Block> | ε
 
-<ReturnStatement> ::= KEYWORD('return') <Expression> SPECIAL_CHAR(';')
+ElsePart → else { StatementList } | ε
 
-<Condition> ::= <Expression> <RelOp> <Expression>
 
-<RelOp> ::= OPERATOR('==') | OPERATOR('!=') | OPERATOR('<') | OPERATOR('>') | OPERATOR('<=') | OPERATOR('>=')
+ReturnStatement → return Expression ;
 
-<Expression> ::= <Term> <MoreTerms>
 
-<MoreTerms> ::= OPERATOR('+') <Term> <MoreTerms>
-            | OPERATOR('-') <Term> <MoreTerms>
-            | ε
+Condition → Expression RelOp Expression
 
-<Term> ::= <Factor> <MoreFactors>
 
-<MoreFactors> ::= OPERATOR('*') <Factor> <MoreFactors>
+RelOp → == | != | < | > | <= | >=
 
-              | OPERATOR('/') <Factor> <MoreFactors>
-              | ε
 
-<Factor> ::= IDENTIFIER
-         | CONSTANT_NUMBER
-         | SPECIAL_CHAR('(') <Expression> SPECIAL_CHAR(')')
+Expression → Term MoreTerms
 
+
+MoreTerms → + Term MoreTerms | - Term MoreTerms | ε
+
+
+Term → Factor MoreFactors
+
+
+MoreFactors → * Factor MoreFactors | / Factor MoreFactors | ε
+
+
+Factor → IDENTIFIER | NUMERIC_CONSTANT | ( Expression )
